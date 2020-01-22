@@ -1,0 +1,117 @@
+﻿<html>
+
+<head>
+
+    <!-- Google Analytics -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-81804817-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-81804817-4');
+    </script>
+
+
+    <!-- Google Analytics / -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="js/global.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="js/stickcanvas.js"></script>
+    <script src="js/stalenessQueue.js"></script>
+
+    <link id="favicon" rel="shortcut icon" href="img/smash.png" type="image/png" />
+
+    <title>Smash Docs</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.75" />
+
+    <meta name="description" content="Smash mechanics and formulas documentation" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@Ruben_dal" />
+    <meta name="twitter:title" content="Smash Docs" />
+    <meta name="twitter:description" content="Smash mechanics and formulas documentation" />
+    <meta name="twitter:image:src"
+          content="https://raw.githubusercontent.com/rubendal/SSBU-Calculator/gh-pages/img/icon.png" />
+    <meta property="og:title" content="Smash Docs" />
+    <meta property="og:image"
+          content="https://raw.githubusercontent.com/rubendal/SSBU-Calculator/gh-pages/img/icon.png" />
+    <meta property="og:description" content="Smash mechanics and formulas documentation" />
+</head>
+
+<body>
+
+    <div id="sidebar">
+        <!-- Open/Close sidebar on small screens -->
+        <div id="mobileButtons">
+            <button id="openSidebar" onclick="ShowSidebar();">&#9776;</button>
+            <button id="closeSidebar" onclick="CollapseSidebar();">&#9776;</button>
+        </div>
+
+        <div id="sidebarContent">
+            <a href="https://github.com/rubendal" target="_blank" rel="noopener">
+                <img class="profile" src="https://avatars.githubusercontent.com/u/10661132?v=3" />
+            </a>
+            <div id="name">
+                <h3>Smash Docs</h3>
+            </div>
+
+            <div id="sidebarMenu">
+                <div id="navigation" class="links">
+
+                    <div id="documentationSections">
+
+                    </div>
+                </div>
+                <div id="profileLinks" class="links">
+                    <a href="https://twitter.com/Ruben_dal" target="_blank" rel="noopener">
+                        <img class="icon" src="img/t-icon.png" />
+                        @Ruben_dal
+                    </a>
+
+                    <a href="https://rubendal.github.io/SSBU-Calculator/" target="_blank" rel="noopener">
+                        <img class="icon invert" src="img/smash.png" />
+                        Smash Calculator
+                    </a>
+
+                    <a href="https://rubendal.github.io/ssbu/" target="_blank" rel="noopener">
+                        <img class="icon invert" src="img/smash.png" />
+                        Smash Data Viewer
+                    </a>
+
+                    <a href="https://ko-fi.com/rubendal" target="_blank" rel="noopener">
+                        <img class="icon" src="img/kofi.png" />
+                        Donate
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+
+
+
+    </div>
+
+    <div id="imgViewer" onclick="HideImage()">
+        <img id="imageViewer" src="img/smash.png"/>
+    </div>
+
+    <script src="js/documentation.js"></script>
+
+</body>
+
+</html>

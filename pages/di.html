@@ -1,0 +1,124 @@
+﻿<div id="documentation">
+    <h3>DI/LSI</h3>
+    Directional Influence (known as DI) and Launch Speed Influence (known as LSI) are mechanics in the game to alter launch speed based on the launch angle and the stick position on the last frame of hitlag (special slowdown effects aren't considered)
+    <br />
+    DI affects launch speed to changed the launch angle you are sent, LSI applies a launch speed multiplier that can increase or decrease you launch distance
+
+    <h4>Stick values</h4>
+    Stick position values are stored on byte variables which can go from -127 to 127, negative values represent left and down positions for horizontal and vertical axis respectively and positive values for right and up positions
+    <br />
+    Those byte values are converted to sensitivity values which go from -1 to 1 using the sensitivity scale value, these are used to determine deadzones and inputs
+
+    <div class="formula">
+        stick X = Stick X position / 120
+        <br />
+        stick Y = Stick Y position / 120
+        <br />
+        If a value is higher than 1 or lower than -1 it is set to 1 or -1 respectively
+        <br />
+        Stick deadzones: if the value is lower than is between -0.2 and 0.2 it is set to 0
+    </div>
+
+    <h4>DI</h4>
+    <h5>Conditions</h5>
+
+    <ul>
+        <li>Stick X and Y sensitivity values aren't 0</li>
+        <li>Launch angle is greater than 9.74°</li>
+        <li>Opponent gets hit with a move that causes tumble</li>
+        <li>Opponent is in the air (doesn't slide on the first frame of hitstun on floors)</li>
+    </ul>
+    <h5>Formula</h5>
+    <div class="formula">
+        <img src="./img/formulas/di.png" onclick="ShowImage(this)" />
+        <br />
+        Where:
+        <br />
+        x, y = Launch speed horizontal and vertical components
+        <br />
+        SX, SY = Stick sensitivity horizontal and vertical components
+        <br />
+        Plus sign is used when <i>(SX * y - SY * x)</i> >= 0, minus sign is used when it's < 0
+        <br />
+        atan2(y,x) is multi-valued inverse tangent, it gives the angle of the line from point (0,0) to point (x,y) on radians
+    </div>
+
+    <h4>LSI</h4>
+    <h5>Conditions</h5>
+    <ul>
+        <li>Same as DI</li>
+        <li>Launch angle is not between 65°-115° nor 245°-295° after DI angle change</li>
+    </ul>
+    <h5>Formula</h5>
+    <div class="formula">
+        If stick Y sensivity > 0
+        <br />
+        <img src="./img/formulas/lsi up.png" onclick="ShowImage(this)" />
+        <br />
+        <br />
+        If stick Y sensivity < 0
+        <br />
+        <img src="./img/formulas/lsi down.png" onclick="ShowImage(this)" />
+    </div>
+
+    <h4>Try it out</h4>
+    <div>
+        Launch angle: <input id="launchAngle" type="number" name="angle" min="0" max="359" step="1" value="38" onchange="UpdateDI()" />
+        <br />
+        <canvas id="stick" class="pLeft">
+        </canvas>
+        <div>
+            <div id="sensitivityX">X: 0, Sensitivity: 0</div>
+            <div id="sensitivityY">Y: 0, Sensitivity: 0</div>
+            <div id="di">Angle with DI: 38</div>
+            <div id="lsi">LSI: 1x</div>
+        </div>
+    </div>
+    <div class="pClear">
+
+    </div>
+
+    <h4>Usage</h4>
+
+    <p>
+        DI and LSI have a huge impact regarding combos and surviving, DI alters the angle you are sent while LSI the distance you are launched. Increasing the distance between you and your opponent might prevent follow ups while decreasing it could potentially help them to continue a combo, this depends on your opponent's options
+    </p>
+    <p>
+        For surviving KO moves you should DI to change the launch angle to avoid the blast zones while using downwards LSI to reduce the distance. DI has a bigger impact than LSI on surviving, holding down on a horizontal move will decrease the distance you will travel but the launch angle will be lower making it possible for the move to still KO when close to the side blastzone or making recovery impossible, however in the case you are far away from it and you have higher chance if getting KO'd by the top blastzone it's better using a downwards DI angle to reduce vertical launch speed since you need a vertical launch speed of 2.4 when crossing the top blast zone to get KO'd
+    </p>
+    <p>
+        It's important to note that moves outside the LSI able range can be LSI'd if DI changes the launch angle to the LSI able range, for example 70 angle moves can be LSI'd when DI'ing down and away since it changes the angle below 65 making it the optimal DI to survive this moves like Terry's Power Geyser, Charizard's Uthrow and Ken's Shoryuken
+    </p>
+
+    <div class="info" style="padding-bottom:20px;">
+        <img src="./img/di.png" onclick="ShowImage(this)" />
+        <div>
+            Visual of Mario DI'ing Terry's Power Geyser at 100% with different stick angles for DI/LSI, down and away makes Mario survive on FD while if he DI's with other angles he gets KO'd
+        </div>
+        <div>
+            <a href="https://rubendal.github.io/SSBU-Calculator/kocalc.html">Look into best DI for moves on specific positions on stages with the KO calculator</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function StickUpdate(position) {
+        stick.drawStick(position);
+
+        $('#sensitivityX').html(`X: ${position.X}, Sensitivity: ${+StickSensibility(position.X).toFixed(4)}`);
+        $('#sensitivityY').html(`Y: ${position.Y}, Sensitivity: ${+StickSensibility(position.Y).toFixed(4)}`);
+        $('#lsi').html(`LSI: ${+LSI(position.Y, parseFloat($('#launchAngle').val())).toFixed(4)}x`);
+
+        UpdateDI();
+    }
+
+    function UpdateDI() {
+        launchAngle = parseFloat($('#launchAngle').val()) * Math.PI / 180;
+        $('#di').html(`Angle with DI: ${+DI(stick.position, { X: 5 * Math.cos(launchAngle), Y: 5 * Math.sin(launchAngle) }, 5).toFixed(4)}`);
+    }
+
+    var launchAngle = parseFloat($('#launchAngle').val()) + Math.PI / 180;
+
+    var stick = new StickWheel(StickUpdate, 'stick', { X: 0, Y: 0 }, 250, 75);
+</script>

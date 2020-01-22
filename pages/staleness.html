@@ -1,0 +1,136 @@
+﻿<div id="documentation">
+    <h3>Staleness queue</h3>
+    In Smash there is a queue of the last 9 moves used that have hit an opponent, a shield or an object with hp like crates or Smashville's balloons with a hitbox,
+    when a move can enter this queue the game applies a damage multiplier based on the position of the queue the move is that decreases damage, if the move isn't on the queue it gains a freshness bonus multiplier which increases damage a little
+    <br />
+    <h4>Queue</h4>
+    <p>
+        A queue can be seen as a list where the first element inserted is the first element that will be removed when it's full
+    </p>
+    <p>
+        Moves that enter the staleness queue are set on the first position of the queue, the moves that were already on the queue are pushed to the next position of the queue. When a move is on the end of the queue and a new one enters the queue it's removed from the queue
+    </p>
+    <p>
+        The queue is reset when the character gets KO'd
+    </p>
+
+    <h4>Reduction factors</h4>
+    <p>
+        Staleness multiplier is calculated using the sum of the reduction factors of the queue where the move is found, most recent used moves in the queue have a higher reduction factor
+    </p>
+    <table id='factorsQueue'>
+        <tr>
+            <td>Position in queue</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7</td>
+            <td>8</td>
+            <td>9</td>
+        </tr>
+        <tr>
+            <td>Reduction factor</td>
+            <td>0.09</td>
+            <td>0.08545</td>
+            <td>0.07635</td>
+            <td>0.0679</td>
+            <td>0.05945</td>
+            <td>0.05035</td>
+            <td>0.04255</td>
+            <td>0.03345</td>
+            <td>0.025</td>
+        </tr>
+    </table>
+    <p>
+        The game also stores in the queue if it hit a shield to apply a 0.85x multiplier to the reduction factor
+    </p>
+    <p>
+        Applying 1 - sum of reduction factors gives the staleness damage multiplier
+    </p>
+
+    <h4>How moves enter staleness queue</h4>
+    <p>
+        Hitboxes that are coded to not enter the staleness queue like thrown items and taunts with hitboxes are ignored, thrown items always use a multiplier of 1 for staleness, taunts always have freshness bonus. Since they don't enter the staleness queue they can't make moves become less stale
+        <br />
+        Hitting with a hitbox of a multi-hit move will add the move to the staleness queue, the multiplier won't be used until it's used again, they are added to the queue based on their script name
+    </p>
+    <h5>A button attacks</h5>
+    <p>
+        Jabs are unique on the staleness queue, Jab 1, Jab 2, Jab 3 and Rapid Jab enter the staleness queue separately making them good moves to unstale moves quickly.
+        <br />
+        Rapid Jab and it's finisher are the same on the queue
+    </p>
+    <p>
+        FTilts with multiple inputs and Bayonetta's Fair enter the staleness queue separately, for example Snake Ftilt 1 doesn't stale Ftilt 2
+    </p>
+    <p>
+        Smash attacks with multiple inputs (Link and Young Link), charging Smash attacks hitboxes (Corrin and Ness) and Simon/Richter Dtilt share the staleness queue, the multiplier is applied until you use the move again
+    </p>
+    <p>
+        Aerials and landing hitboxes share staleness queue
+    </p>
+    <p>
+        Unlike Smash 4 each pummel will enter the staleness queue since they cannot be cancelled into another one on script in Ultimate like some characters could in Smash 4
+    </p>
+
+    <h5>Special moves</h5>
+    <p>
+        Special moves enter the staleness queue based on the script name, SpecialN is for neutral B and all its variations (aerial, charged, inputs) share the staleness queue. Staleness isn't applied on moves that use multiple scripts as long as the don't require additional inputs until the move is used again.
+        <br />
+        For example Corrin's Dragon Fang Shot use a script for the projectile and the bite however hitting with the projectile won't stale the bite since it's used automatically until you start another one, meanwhile Dancing Blade/Double-Edge Dance will enter the staleness queue per input
+    </p>
+    <p>
+        Hero's Command Selection spells staleness is not shared for all spells that can be used with the input, staleness is shared between spells of the same family
+
+        <ul>
+            <li>Flame Slash/Kacrackle Slash/Metal Slash/Hatchet Man</li>
+            <li>Sizz/Sizzle</li>
+            <li>Bang/Kaboom</li>
+            <li>Whack/Thwack</li>
+        </ul>
+        Hocus Pocus versions of these spells also share their staleness queue with the move from the Command Selection version
+    </p>
+
+    <h4>Test the staleness queue and multipliers</h4>
+    <div>
+        Move: <select id="moveSelection">
+        </select>
+        <input id="hitShieldBox" type="checkbox" name="hitShield" /> Hit shield
+        <br />
+        <button value="Add" onclick="Add()">Add</button>
+        <button value="Reset" onclick="Reset()">Reset</button>
+    </div>
+    <br />
+    <div id="queueContainer">
+
+    </div>
+    <div id="multipliers" style="padding-bottom:50px;">
+
+    </div>
+
+</div>
+
+<script>
+    var queue = new Queue();
+
+    $('#queueContainer').html(queue.print());
+
+    $('#moveSelection').html(SetMoveList());
+
+    $('#multipliers').html(queue.getMultipliers());
+
+    function Add() {
+        queue.push($('#moveSelection').val(), $('#hitShieldBox').prop('checked'));
+        $('#queueContainer').html(queue.print());
+        $('#multipliers').html(queue.getMultipliers());
+    }
+
+    function Reset() {
+        queue.reset();
+        $('#queueContainer').html(queue.print());
+        $('#multipliers').html(queue.getMultipliers());
+    }
+</script>

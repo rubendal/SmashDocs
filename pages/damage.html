@@ -1,0 +1,66 @@
+﻿<div id="documentation">
+    <h3>Damage multipliers</h3>
+    <p>
+        Damage is defined in a hitbox parameters, this is added to the current damage percent of the character hit with it. Both current opponent percent and damage are used for knockback calculation and are related to KBG
+    </p>
+    <p>
+        However there are multiple damage multipliers in the game that affect the damage you deal and receive however not all of them work the same way.
+    </p>
+    First let's check the knockback formula
+    <div class="formula">
+        <img src="./img/formulas/knockback.png" onclick="ShowImage(this)" />
+        <br />
+        Where:
+        <br />
+        baseDamage = Hitbox base damage
+        <br />
+        damage = Damage dealt to the opponent
+        <br />
+        percent + damage = Opponent's % after hit
+    </div>
+    <p>
+        There are 4 kind of damage multipliers
+    </p>
+
+    <h4>Base damage multipliers</h4>
+    These affect both damage and baseDamage variables on the knockback formula. It also affects hitlag, shield damage and shield stun
+
+    <ul>
+        <li>Aura</li>
+        <li>Deep Breathing</li>
+        <li>Smash attack charging</li>
+        <li>Counter and reflectors damage multipliers</li>
+    </ul>
+
+    <h4>Damage dealt multipliers</h4>
+    <p>
+        These multipliers only affect the damage opponents will receive from hits, it doesn't affect hitbox base damage. On the knockback formula it only affects the damage variable
+    </p>
+    <p>
+        It also affects hitlag, shield damage and shield stun
+    </p>
+    <ul>
+        <li>Speed, Buster, Smash Monado Arts on non-throw moves</li>
+        <li>Short hop aerial</li>
+    </ul>
+
+    <h4>Damage received multipliers</h4>
+    <p>
+        These multiplier only affect the damage you receive from hits, it doesn't affect hitbox base damage. Unlike damage dealt multipliers these only affect hitlag received (attacker hitlag is unchanged) and it doesn't affect shield damage, shield hitlag nor shield stun
+    </p>
+    <ul>
+        <li>Jump, Shield and Buster Monado Arts</li>
+        <li>Bowser Jr hurtbox damage multipliers</li>
+        <li>Deep Breathing damage reduction multiplier</li>
+    </ul>
+
+    <h4>Special damage multipliers</h4>
+    <p>
+        These multipliers are only applied to the damage the opponent receives however it's not applied to the damage nor base damage variables on the knockback formula, it also doesn't affect shield damage, shield hitlag nor shield stun. It only affects both attacker and target hitlag
+    </p>
+    <ul>
+        <li>1v1 multiplier</li>
+        <li>Speed, Buster, Smash Monado Arts on Throws</li>
+        <li>Ink</li>
+    </ul>
+</div>
